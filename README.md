@@ -1,5 +1,11 @@
-MQTT benchmarking tool
+MQTT benchmarking tool (out of tree)
 =========
+
+# Difference with original MQTT-Benchmark repository
+
+This modified fork enables the user to add the `--all-results` flags, which saves in the JSON format all the message times of all clients. This enables more complex analysis, such as boxplots of all values, or the median computation.
+
+# MQTT benchmarking tool
 
 A simple MQTT (broker) benchmarking tool.
 

@@ -26,6 +26,7 @@ type Client struct {
 	Quiet       bool
 	WaitTimeout time.Duration
 	TLSConfig   *tls.Config
+	AllResults  bool
 }
 
 // Run runs benchmark tests and writes results in the provided channel
@@ -63,6 +64,11 @@ func (c *Client) Run(res chan *RunResults) {
 			runResults.MsgTimeMean = stats.StatsMean(times)
 			runResults.RunTime = duration.Seconds()
 			runResults.MsgsPerSec = float64(runResults.Successes) / duration.Seconds()
+			if c.AllResults {
+				runResults.AllTimes = times
+			} else {
+				runResults.AllTimes = []float64{}
+			}
 			// calculate std if sample is > 1, otherwise leave as 0 (convention)
 			if c.MsgCount > 1 {
 				runResults.MsgTimeStd = stats.StatsSampleStandardDeviation(times)

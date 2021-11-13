@@ -24,15 +24,16 @@ type Message struct {
 
 // RunResults describes results of a single client / run
 type RunResults struct {
-	ID          int     `json:"id"`
-	Successes   int64   `json:"successes"`
-	Failures    int64   `json:"failures"`
-	RunTime     float64 `json:"run_time"`
-	MsgTimeMin  float64 `json:"msg_time_min"`
-	MsgTimeMax  float64 `json:"msg_time_max"`
-	MsgTimeMean float64 `json:"msg_time_mean"`
-	MsgTimeStd  float64 `json:"msg_time_std"`
-	MsgsPerSec  float64 `json:"msgs_per_sec"`
+	ID          int       `json:"id"`
+	Successes   int64     `json:"successes"`
+	Failures    int64     `json:"failures"`
+	RunTime     float64   `json:"run_time"`
+	MsgTimeMin  float64   `json:"msg_time_min"`
+	MsgTimeMax  float64   `json:"msg_time_max"`
+	MsgTimeMean float64   `json:"msg_time_mean"`
+	MsgTimeStd  float64   `json:"msg_time_std"`
+	MsgsPerSec  float64   `json:"msgs_per_sec"`
+	AllTimes    []float64 `json:"all_times"`
 }
 
 // TotalResults describes results of all clients / runs
@@ -73,6 +74,7 @@ func main() {
 		clientPrefix = flag.String("client-prefix", "mqtt-benchmark", "MQTT client id prefix (suffixed with '-<client-num>'")
 		clientCert   = flag.String("client-cert", "", "Path to client certificate in PEM format")
 		clientKey    = flag.String("client-key", "", "Path to private clientKey in PEM format")
+		allResults   = flag.Bool("all-results", false, "Show all message times for each client")
 	)
 
 	flag.Parse()
@@ -117,6 +119,7 @@ func main() {
 			Quiet:       *quiet,
 			WaitTimeout: time.Duration(*wait) * time.Millisecond,
 			TLSConfig:   tlsConfig,
+			AllResults:  *allResults,
 		}
 		go c.Run(resCh)
 	}
